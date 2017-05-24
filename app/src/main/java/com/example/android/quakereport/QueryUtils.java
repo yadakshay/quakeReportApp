@@ -59,7 +59,7 @@ public final class QueryUtils {
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
-        Log.e(LOG_TAG,jsonResponse);
+
         // Extract relevant fields from the JSON response and create an {@link Event} object
         ArrayList<eqevent> earthquake = QueryUtils.extractEarthquakes(jsonResponse);
 
@@ -145,7 +145,7 @@ public final class QueryUtils {
      */
     public static ArrayList<eqevent> extractEarthquakes(String jsonString) {
 
-        Log.e(LOG_TAG,jsonString);
+
         // Create an empty ArrayList that we can start adding earthquakes to
         ArrayList<eqevent> earthquakes = new ArrayList<>();
 
@@ -163,7 +163,7 @@ public final class QueryUtils {
             JSONArray featuresArray = jsonObj.getJSONArray("features");
 
             //loop though entire features array
-            for (int i=0; i <= featuresArray.length(); i++)
+            for (int i=0; i < featuresArray.length(); i++)
             {
                 //get ith properties object
                 JSONObject c = featuresArray.getJSONObject(i);

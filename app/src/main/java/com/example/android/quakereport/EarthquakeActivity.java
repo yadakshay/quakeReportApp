@@ -15,7 +15,9 @@
  */
 package com.example.android.quakereport;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,8 +27,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<eqevent>>{
+
+    private static final int EARTHQUAKE_LOADER_ID = 1;
 
     public void sendIntent(String url) {
         Intent i = new Intent(Intent.ACTION_VIEW);
@@ -42,8 +47,42 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
+    getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
+    //    new getData().execute(USGS_REQUEST_URL);
 
-        new getData().execute(USGS_REQUEST_URL);
+    }
+
+    @Override
+    public Loader<List<eqevent>> onCreateLoader(int i, Bundle bundle) {
+        return new EarthquakeLoader(this, USGS_REQUEST_URL);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<eqevent>> loader, List<eqevent> earthquakes) {
+        // If there is no result, do nothing.
+        if (earthquakes == null) {
+            return;
+        }
+
+        final List<eqevent> earthquakes2 = earthquakes;
+
+        // Update the information displayed to the user.
+        updateUi(earthquakes);
+        ListView earthquakeListView = (ListView) findViewById(R.id.list);
+
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView < ? > parent, View view, int position, long id){
+                eqevent currentEvent = earthquakes2.get(position);
+                String url = currentEvent.getUrl();
+                sendIntent(url);
+            }
+        });
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<eqevent>> loader) {
+        // TODO: Loader reset, so we can clear out our existing data.
 
     }
 
@@ -86,13 +125,13 @@ public class EarthquakeActivity extends AppCompatActivity {
     }
 
 
-    private void updateUi(ArrayList<eqevent> earthquakes) {
+    private void updateUi(List<eqevent> earthquakes) {
 
     // Find a reference to the {@link ListView} in the layout
     ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
     // Create a new {@link ArrayAdapter} of earthquakes
-    CustomAdapter adapter = new CustomAdapter(this, earthquakes);
+    CustomAdapter adapter = new CustomAdapter(this, (ArrayList<eqevent>) earthquakes);
 
     // Set the adapter on the {@link ListView}
     // so the list can be populated in the user interface
