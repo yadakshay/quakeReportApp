@@ -20,7 +20,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<eqevent>> {
     final String url;
     public EarthquakeLoader(Context context, String url1) {
         super(context);
-        // TODO: Finish implementing this constructor
+
         url = url1;
     }
 
@@ -39,7 +39,7 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<eqevent>> {
 
         // Perform the HTTP request for earthquake data and process the response.
         // Event earthquake = Utils.fetchEarthquakeData(USGS_REQUEST_URL);
-        ArrayList<eqevent> earthquake = QueryUtils.fetchEarthquakeData(url);
+       ArrayList<eqevent> earthquake = QueryUtils.fetchEarthquakeData(url);
         return earthquake;
     }
 

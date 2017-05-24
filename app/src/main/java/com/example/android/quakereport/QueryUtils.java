@@ -49,7 +49,7 @@ public final class QueryUtils {
      * Query the USGS dataset and return an {@link eqevent} object to represent a single earthquake.
      */
     public static ArrayList<eqevent> fetchEarthquakeData(String requestUrl) {
-        // Create URL object
+         // Create URL object
         URL url = createUrl(requestUrl);
 
         // Perform HTTP request to the URL and receive a JSON response back
